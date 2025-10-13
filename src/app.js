@@ -1,10 +1,18 @@
 const express = require("express");
 const sequelize = require("./config/database");
 const usuarioRoutes = require("./routes/usuarioRoutes");
+const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
 app.use(express.json());
+
+// Configurar CORS
+app.use(cors({
+  origin: "http://localhost:5173", 
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true, 
+}));
 
 // Rutas
 app.use("/api/usuarios", usuarioRoutes);
