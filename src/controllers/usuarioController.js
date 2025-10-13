@@ -5,15 +5,33 @@ require("dotenv").config();
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
-// Obtener todos los usuarios
-exports.obtenerUsuarios = async (req, res) => {
+// Obtener un usuario
+// Obtener usuario por body (id o correo)
+exports.obtenerUsuario = async (req, res) => {
   try {
-    const usuarios = await Usuario.findAll();
-    res.json({ ok: true, usuarios });
+    const { id, correo } = req.body;
+
+    let usuario;
+
+    if (id) {
+      usuario = await Usuario.findByPk(id);
+    } else if (correo) {
+      usuario = await Usuario.findOne({ where: { correo } });
+    } else {
+      return res.status(400).json({ ok: false, error: "Debes enviar id o correo" });
+    }
+
+    if (!usuario) {
+      return res.status(404).json({ ok: false, error: "Usuario no encontrado" });
+    }
+
+    res.json({ ok: true, user: usuario });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
 };
+
+
 
 // Crear un nuevo usuario (registro)
 exports.crearUsuario = async (req, res) => {

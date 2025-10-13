@@ -1,6 +1,7 @@
 const express = require("express");
 const sequelize = require("./config/database");
 const usuarioRoutes = require("./routes/usuarioRoutes");
+const ConfiguracionRoutes = require("./routes/configuracionRoutes");
 const cors = require("cors");
 require("dotenv").config();
 
@@ -16,6 +17,7 @@ app.use(cors({
 
 // Rutas
 app.use("/api/usuarios", usuarioRoutes);
+app.use("/api/configuracion", ConfiguracionRoutes);
 
 // Sincronizar base de datos
 sequelize.sync()
