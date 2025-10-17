@@ -31,6 +31,21 @@ exports.obtenerUsuario = async (req, res) => {
   }
 };
 
+// Obtener todos los usuarios (para sugerencias)
+exports.obtenerTodosUsuarios = async (req, res) => {
+  try {
+    const usuarios = await Usuario.findAll({
+      attributes: ['id', 'nombre'], 
+      where: req.body.usuarioId
+        ? { id: { [require('sequelize').Op.ne]: req.body.usuarioId } } // Excluir usuario actual si se envía usuarioId
+        : undefined,
+    });
+
+    res.json({ ok: true, usuarios });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+};
 
 
 // Crear un nuevo usuario (registro)
