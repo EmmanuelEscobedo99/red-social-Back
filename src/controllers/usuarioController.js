@@ -31,6 +31,23 @@ exports.obtenerUsuario = async (req, res) => {
   }
 };
 
+// Obtener usuario por ID
+exports.obtenerUsuarioPorId = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const usuario = await Usuario.findByPk(id);
+
+    if (!usuario) {
+      return res.status(404).json({ ok: false, error: "Usuario no encontrado" });
+    }
+
+    res.json({ ok: true, user: usuario });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+};
+
 // Obtener todos los usuarios (para sugerencias)
 exports.obtenerTodosUsuarios = async (req, res) => {
   try {
